@@ -1,0 +1,24 @@
+ import {Component, Input, Output, EventEmitter} from '@angular/core';
+ 
+ @Component({
+   standalone: true,
+   selector: 'app-input-output',
+   template: `
+   <p [style.text-decoration]="lineThrough">Item: {{item}}</p>
+   <button type="button" (click)="delete()">Delete item with an Output!</button>
+   `,
+ })
+ export class InputOutputComponent {
+   @Input() item = '';
+   @Output() deleteRequest = new EventEmitter<string>();
+ 
+   lineThrough = '';
+ 
+   delete() {
+-    console.warn('Child says: emitting item deleteRequest with', this.item);
++    const sanitizedItem = this.item.replace(/[^a-zA-Z0-9 _-]/g, '');
++    console.warn('Child says: emitting item deleteRequest with', sanitizedItem);
+     this.deleteRequest.emit(this.item);
+     this.lineThrough = this.lineThrough ? '' : 'line-through';
+   }
+ }
